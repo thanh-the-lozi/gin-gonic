@@ -1,9 +1,6 @@
 package main
 
-import (
-	"github.com/gin-gonic/gin"
-	_ "github.com/go-sql-driver/mysql"
-)
+import "github.com/gin-gonic/gin"
 
 var (
 	r *gin.Engine
