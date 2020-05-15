@@ -3,7 +3,6 @@ package main
 import (
 	"database/sql"
 	"fmt"
-	"net/http"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
@@ -57,7 +56,7 @@ func Read(c *gin.Context) {
 		people = append(people, p)
 	}
 
-	c.JSON(http.StatusOK, people) /* status OK = 200 */
+	c.JSON(200, people) /* status OK = 200 */
 }
 
 /* Lưu dữ liệu lên database */
@@ -65,7 +64,7 @@ func Create(c *gin.Context) {
 	/* Đọc dữ liệu được gửi chung request */
 	json := People{}
 	if err := c.ShouldBindJSON(&json); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
+		c.JSON(400, gin.H{
 			"message": err.Error(),
 		})
 		return
@@ -79,7 +78,7 @@ func Create(c *gin.Context) {
 	preparedQuery, _ := db.Prepare(query)
 	preparedQuery.Exec(json.Name, json.Age, json.Gender)
 
-	c.JSON(http.StatusCreated, gin.H{
+	c.JSON(201, gin.H{
 		"message": "inserted",
 	}) /* status Created = 201 */
 }
@@ -89,7 +88,7 @@ func Update(c *gin.Context) {
 	/* Đọc dữ liệu được gửi chung request */
 	json := People{}
 	if err := c.ShouldBindJSON(&json); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
+		c.JSON(400, gin.H{
 			"message": err.Error(),
 		})
 		return
@@ -103,7 +102,7 @@ func Update(c *gin.Context) {
 	preparedQuery, _ := db.Prepare(query)
 	preparedQuery.Exec(json.Name, json.Age, json.Gender, json.ID)
 
-	c.JSON(http.StatusCreated, gin.H{
+	c.JSON(200, gin.H{
 		"message": "updated",
 	}) /* status OK = 200 */
 }
@@ -120,7 +119,7 @@ func Delete(c *gin.Context) {
 	preparedQuery, _ := db.Prepare(query)
 	preparedQuery.Exec(id)
 
-	c.JSON(http.StatusOK, gin.H{
+	c.JSON(200, gin.H{
 		"message": "deleted",
 	}) /* status OK = 200 */
 }
